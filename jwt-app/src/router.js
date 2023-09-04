@@ -1,17 +1,18 @@
 const express = require('express')
 const router = express.Router();
 
+const authController = require('../controllers/authController')
+
+
 router.get('/', (req, res) => {
     res.status(200).json({msg: 'Hello World!'})
     
 })
 
-router.post('/auth/register', async(req,res) => {
-    const{name, email, password, confirmpassword} = req.body
+router.get('/user/:id',authController.checkToken, authController.getUserID);
 
-    if(!name && !email && !password && !confirmpassword){
-        return res.status(422).json({msg: 'Insira os dados corretamente!'})
-    }
-})
+router.post('/auth/login', authController.userLogin);
+
+router.post('/auth/register', authController.userRegister)
 
 module.exports = router;
