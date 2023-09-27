@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     
 })
 
-router.get('/user/:id',authController.checkToken, authController.getUserID);
+router.get('/user',authController.checkToken, authController.getUserID);
 
 router.post('/auth/login', authController.userLogin);
 

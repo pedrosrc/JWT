@@ -4,12 +4,14 @@ const jwt = require('jsonwebtoken')
 
 
 const getUserID = async (req, res) => {
-    const id = req.params.id
 
+    const id = req.userId;
+   
     const user = await Auth.findById(id, '-password')
     if (!user) {
         return res.status(404).json({ msg: 'Usuário não encontrado!' })
     }
+    res.status(200).json(user)
 }
 
 const userRegister = async (req, res) => {
@@ -41,7 +43,7 @@ const userRegister = async (req, res) => {
     })
     try {
         await user.save()
-        res.status(201).json({ msg: 'Usuário criado com sucesso' })
+        res.status(201).json({ msg: 'Cadastrado com sucesso!' })
     } catch (error) {
         res.status(500).json({ msg: 'Aconteceu um erro, tente novamente mais tarde!' })
     }
@@ -49,8 +51,8 @@ const userRegister = async (req, res) => {
 
 
 const checkToken = async (req, res, next) => {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(" ")[1]
+    const authHeader = await req.headers['authorization']
+    const token = authHeader 
 
     if (!token) {
         return res.status(401).json({ msg: 'Acesso negado!' })
@@ -59,12 +61,13 @@ const checkToken = async (req, res, next) => {
     try {
         const secret = process.env.SECRET
 
-        jwt.verify(token, secret)
-
+        const decoded = jwt.verify(token, secret)
+        const userId = decoded.id  
+        req.userId = userId
         next()
 
     } catch (error) {
-        res.status(400).json({ msg: 'Token Invalido' })
+        res.status(400).json({ msg: 'Token Invalido'})
     }
 }
 
@@ -94,7 +97,7 @@ const userLogin = async (req, res) => {
             },
             secret,
         )
-        res.status(200).json({ msg: 'Autenticação Concluída com Sucesso!', token })
+        res.status(200).json(token)
     } catch (error) {
         res.status(400).json({ msg: 'Autenticação Negada' })
     }
