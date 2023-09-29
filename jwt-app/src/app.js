@@ -12,13 +12,14 @@ app.use(cors({
 app.use(express.json())
 app.use(router)
 
-
 const db = process.env.DB_ACESS
 
 mongoose.connect(db)
 .then(() => {
-    app.listen(3333)
-    console.log('Sucess')
+    app.listen({
+        host: '0.0.0.0',
+        port: process.env.PORT ?? 3333
+        })
 })
 .catch((error) => {
     console.log(error)
