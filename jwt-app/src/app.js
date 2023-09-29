@@ -6,9 +6,13 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors({
-    origin: ["https://auth-project-pi.vercel.app/login", "https://auth-project-pi.vercel.app/register", "https://auth-project-pi.vercel.app/dashboard"]
-}))
+const corsOptions = {
+    origin: ["https://auth-project-pi.vercel.app/login", "https://auth-project-pi.vercel.app/register", "https://auth-project-pi.vercel.app/dashboard"],
+    credentials: true,
+    optionsSuccessStatus: 200 
+}
+
+app.use(cors(corsOptions));
 
 app.use(express.json())
 app.use(router)
