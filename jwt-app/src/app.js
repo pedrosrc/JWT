@@ -8,6 +8,7 @@ const app = express();
 
 const corsOptions = {
     origin: ["https://auth-project-pi.vercel.app/login", "https://auth-project-pi.vercel.app/register", "https://auth-project-pi.vercel.app/dashboard"],
+    methods:'GET, POST',
     credentials: true,
     optionsSuccessStatus: 200 
 }
